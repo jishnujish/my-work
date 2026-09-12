@@ -20,6 +20,12 @@ function DraftPage({
   selectPlayer,
   onBack,
 }: DraftPageProps) {
+
+  // Only available players should be displayed
+  const availablePlayers = players.filter(
+    (player) => player.status === "available"
+  );
+
   return (
     <div className="app">
       <h1 className="headers">🏏 Player Selection</h1>
@@ -28,17 +34,21 @@ function DraftPage({
 
         {/* Available Players */}
         <section className="card available">
-          <h2 className="headers">🏏 Available Players</h2>
+          <h2 className="headers">
+            🏏 Available Players
+          </h2>
 
-          {players.length === 0 ? (
+          {availablePlayers.length === 0 ? (
             <p>All players have been selected 🎉</p>
           ) : (
-            players.map((player) => (
+            availablePlayers.map((player) => (
               <div
                 className="player-card"
                 key={player.id}
               >
-                <strong className="headers">{player.name}</strong>
+                <strong className="headers">
+                  {player.name}
+                </strong>
 
                 <div className="captain-buttons">
                   {captains.map((captain) => (
@@ -67,7 +77,9 @@ function DraftPage({
               className="card team"
               key={captain.id}
             >
-              <h2 className="headers">👑 {captain.name}</h2>
+              <h2 className="headers">
+                👑 {captain.name}
+              </h2>
 
               {teams[captain.id]?.length ? (
                 teams[captain.id].map((player) => (
@@ -79,7 +91,9 @@ function DraftPage({
                   </div>
                 ))
               ) : (
-                <p className="headers">No players selected</p>
+                <p className="headers">
+                  No players selected
+                </p>
               )}
             </div>
           ))}
