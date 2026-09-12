@@ -20,9 +20,11 @@ function AdminPage({
   onStartDraft,
 }: AdminPageProps) {
   const [playerName, setPlayerName] = useState("");
+  const [playerList, setPlayerList] = useState("");
+
   const [captainName, setCaptainName] = useState("");
 
-  // Add Player
+  // Add Single Player
   const addPlayer = async () => {
     const name = playerName.trim();
 
@@ -48,6 +50,47 @@ function AdminPage({
     }
 
     setPlayerName("");
+  };
+
+  // Add Multiple Players
+  const addMultiplePlayers = async () => {
+    const names = playerList
+      .split("\n")
+      .map((line) =>
+        line
+          .replace(/^\s*\d+[\.\)]\s*/, "")
+          .trim()
+      )
+      .filter(Boolean);
+
+    if (names.length === 0) {
+      alert("Please enter player names");
+      return;
+    }
+
+    const playersToInsert = names.map((name) => ({
+      name: name,
+      status: "available",
+    }));
+
+    const { data, error } = await supabase
+      .from("players")
+      .insert(playersToInsert)
+      .select();
+
+    if (error) {
+      console.error("Add players error:", error);
+      alert("Failed to add players");
+      return;
+    }
+
+    if (data) {
+      setPlayers((current) => [...current, ...data]);
+    }
+
+    setPlayerList("");
+
+    alert(`${data?.length || 0} players added successfully`);
   };
 
   // Delete Player
@@ -123,6 +166,7 @@ function AdminPage({
         <section className="card">
           <h2 className="headers">👤 Players</h2>
 
+          {/* Single Player */}
           <div className="add-row">
             <input
               type="text"
@@ -143,6 +187,26 @@ function AdminPage({
             </button>
           </div>
 
+          {/* Multiple Players */}
+          <div className="add-row">
+            <textarea
+              rows={5}
+              placeholder={`1. Jishnu
+2. Nikhil
+3. Akhil
+4. Rahul`}
+              value={playerList}
+              onChange={(e) =>
+                setPlayerList(e.target.value)
+              }
+            />
+
+            <button onClick={addMultiplePlayers}>
+              + Add List
+            </button>
+          </div>
+
+          {/* Players List */}
           {players.length === 0 ? (
             <p className="empty">No players added</p>
           ) : (
@@ -216,7 +280,6 @@ function AdminPage({
             ))
           )}
         </section>
-
       </div>
 
       {/* Start Draft */}
