@@ -1,24 +1,63 @@
 import { useEffect, useState } from "react";
+
 import AdminPage from "./pages/AdminPage";
 import DraftPage from "./pages/DraftPage";
-import type { Player, Captain, Teams } from "./types";
+import LoginPage from "./pages/LoginPage";
+
+import type {
+  Player,
+  Captain,
+  Teams,
+} from "./types";
+
 import { supabase } from "./lib/supabase";
 
 import "./App.css";
 
 function App() {
-  const [isDraftStarted, setIsDraftStarted] = useState(false);
+  // ==========================================
+  // LOGIN STATE
+  // ==========================================
 
-  const [players, setPlayers] = useState<Player[]>([]);
-  const [captains, setCaptains] = useState<Captain[]>([]);
-  const [teams, setTeams] = useState<Teams>({});
+  const [isLoggedIn, setIsLoggedIn] =
+    useState(false);
+
+  const [isAdmin, setIsAdmin] =
+    useState(false);
 
   // ==========================================
-  // 1. LOAD INITIAL DATA FROM SUPABASE
+  // DRAFT STATE
   // ==========================================
+
+  const [isDraftStarted, setIsDraftStarted] =
+    useState(false);
+
+  const [players, setPlayers] =
+    useState<Player[]>([]);
+
+  const [captains, setCaptains] =
+    useState<Captain[]>([]);
+
+  const [teams, setTeams] =
+    useState<Teams>({});
+
+  // ==========================================
+  // ACTIVE CAPTAIN
+  // ==========================================
+
+  const [activeCaptainId, setActiveCaptainId] =
+    useState<string>("");
+
+  // ==========================================
+  // 1. LOAD DATA FROM SUPABASE
+  // ==========================================
+
   useEffect(() => {
     const loadData = async () => {
-      // Load players
+      // ------------------------------
+      // Load Players
+      // ------------------------------
+
       const {
         data: playersData,
         error: playersError,
@@ -35,7 +74,10 @@ function App() {
         setPlayers(playersData);
       }
 
-      // Load captains
+      // ------------------------------
+      // Load Captains
+      // ------------------------------
+
       const {
         data: captainsData,
         error: captainsError,
@@ -50,6 +92,13 @@ function App() {
         );
       } else if (captainsData) {
         setCaptains(captainsData);
+
+        // First captain gets first turn
+        if (captainsData.length > 0) {
+          setActiveCaptainId(
+            captainsData[0].id
+          );
+        }
       }
     };
 
@@ -59,6 +108,7 @@ function App() {
   // ==========================================
   // 2. REALTIME - PLAYERS
   // ==========================================
+
   useEffect(() => {
     const playerChannel = supabase
       .channel("players-realtime")
@@ -75,9 +125,7 @@ function App() {
             payload
           );
 
-          // ------------------------------
           // PLAYER INSERT
-          // ------------------------------
           if (payload.eventType === "INSERT") {
             const newPlayer =
               payload.new as Player;
@@ -100,9 +148,7 @@ function App() {
             });
           }
 
-          // ------------------------------
           // PLAYER UPDATE
-          // ------------------------------
           if (payload.eventType === "UPDATE") {
             const updatedPlayer =
               payload.new as Player;
@@ -116,9 +162,7 @@ function App() {
             );
           }
 
-          // ------------------------------
           // PLAYER DELETE
-          // ------------------------------
           if (payload.eventType === "DELETE") {
             const deletedPlayer =
               payload.old as Player;
@@ -140,13 +184,16 @@ function App() {
       });
 
     return () => {
-      supabase.removeChannel(playerChannel);
+      supabase.removeChannel(
+        playerChannel
+      );
     };
   }, []);
 
   // ==========================================
   // 3. REALTIME - CAPTAINS
   // ==========================================
+
   useEffect(() => {
     const captainChannel = supabase
       .channel("captains-realtime")
@@ -163,9 +210,7 @@ function App() {
             payload
           );
 
-          // ------------------------------
           // CAPTAIN INSERT
-          // ------------------------------
           if (payload.eventType === "INSERT") {
             const newCaptain =
               payload.new as Captain;
@@ -174,7 +219,8 @@ function App() {
               const alreadyExists =
                 currentCaptains.some(
                   (captain) =>
-                    captain.id === newCaptain.id
+                    captain.id ===
+                    newCaptain.id
                 );
 
               if (alreadyExists) {
@@ -188,25 +234,23 @@ function App() {
             });
           }
 
-          // ------------------------------
           // CAPTAIN UPDATE
-          // ------------------------------
           if (payload.eventType === "UPDATE") {
             const updatedCaptain =
               payload.new as Captain;
 
             setCaptains((currentCaptains) =>
-              currentCaptains.map((captain) =>
-                captain.id === updatedCaptain.id
-                  ? updatedCaptain
-                  : captain
+              currentCaptains.map(
+                (captain) =>
+                  captain.id ===
+                  updatedCaptain.id
+                    ? updatedCaptain
+                    : captain
               )
             );
           }
 
-          // ------------------------------
           // CAPTAIN DELETE
-          // ------------------------------
           if (payload.eventType === "DELETE") {
             const deletedCaptain =
               payload.old as Captain;
@@ -229,13 +273,16 @@ function App() {
       });
 
     return () => {
-      supabase.removeChannel(captainChannel);
+      supabase.removeChannel(
+        captainChannel
+      );
     };
   }, []);
 
   // ==========================================
-  // 4. CREATE TEAMS FROM PLAYERS
+  // 4. CREATE TEAMS
   // ==========================================
+
   useEffect(() => {
     const newTeams: Teams = {};
 
@@ -244,11 +291,15 @@ function App() {
         player.status === "selected" &&
         player.captain_id
       ) {
-        if (!newTeams[player.captain_id]) {
+        if (
+          !newTeams[player.captain_id]
+        ) {
           newTeams[player.captain_id] = [];
         }
 
-        newTeams[player.captain_id].push(player);
+        newTeams[
+          player.captain_id
+        ].push(player);
       }
     });
 
@@ -256,46 +307,142 @@ function App() {
   }, [players]);
 
   // ==========================================
-  // 5. SELECT PLAYER
+  // 5. LOGIN
   // ==========================================
- const selectPlayer = async (
-  player: Player,
-  captainId: string
-) => {
-  const {
-    data,
-    error,
-  } = await supabase
-    .from("players")
-    .update({
-      status: "selected",
-      captain_id: captainId,
-    })
-    .eq("id", player.id)
-    .eq("status", "available")
-    .select()
-    .single();
 
-  if (error) {
-    console.error("Select player error:", error);
-    alert("Player selection failed");
-    return;
-  }
+  const handleLogin = (
+    username: string,
+    password: string
+  ) => {
+    // ADMIN
+    if (
+      username === "admin" &&
+      password === "admin123"
+    ) {
+      setIsLoggedIn(true);
+      setIsAdmin(true);
+      setIsDraftStarted(false);
 
-  if (data) {
-    // Immediately update the player status
-    setPlayers((currentPlayers) =>
-      currentPlayers.map((p) =>
-        p.id === data.id ? data : p
-      )
+      return;
+    }
+
+    // NORMAL USER
+    if (
+      username === "user" &&
+      password === "user123"
+    ) {
+      setIsLoggedIn(true);
+      setIsAdmin(false);
+
+      // User directly enters selection page
+      setIsDraftStarted(true);
+
+      return;
+    }
+
+    alert(
+      "Invalid username or password"
+    );
+  };
+
+  // ==========================================
+  // 6. SELECT PLAYER
+  // ==========================================
+
+  const selectPlayer = async (
+    player: Player,
+    captainId: string
+  ) => {
+    // Only active captain can select
+    if (
+      captainId !== activeCaptainId
+    ) {
+      return;
+    }
+
+    // Update Supabase
+    const {
+      data,
+      error,
+    } = await supabase
+      .from("players")
+      .update({
+        status: "selected",
+        captain_id: captainId,
+      })
+      .eq("id", player.id)
+      .eq("status", "available")
+      .select()
+      .single();
+
+    if (error) {
+      console.error(
+        "Select player error:",
+        error
+      );
+
+      alert(
+        "Player selection failed"
+      );
+
+      return;
+    }
+
+    if (data) {
+      // Update local state
+      setPlayers((currentPlayers) =>
+        currentPlayers.map((p) =>
+          p.id === data.id
+            ? data
+            : p
+        )
+      );
+
+      // =====================================
+      // CHANGE TURN TO OTHER CAPTAIN
+      // =====================================
+
+      const nextCaptain =
+        captains.find(
+          (captain) =>
+            captain.id !== captainId
+        );
+
+      if (nextCaptain) {
+        setActiveCaptainId(
+          nextCaptain.id
+        );
+      }
+    }
+  };
+
+  // ==========================================
+  // 7. LOGOUT
+  // ==========================================
+
+  const handleLogout = () => {
+    setIsLoggedIn(false);
+    setIsAdmin(false);
+    setIsDraftStarted(false);
+  };
+
+  // ==========================================
+  // 8. LOGIN PAGE
+  // ==========================================
+
+  if (!isLoggedIn) {
+    return (
+      <LoginPage
+        onLogin={handleLogin}
+      />
     );
   }
-};
 
   // ==========================================
-  // 6. ADMIN PAGE
+  // 9. ADMIN PAGE
   // ==========================================
-  if (!isDraftStarted) {
+
+  if (isAdmin) {
     return (
       <AdminPage
         players={players}
@@ -305,22 +452,25 @@ function App() {
         onStartDraft={() => {
           setIsDraftStarted(true);
         }}
+        onLogout={handleLogout}
       />
     );
   }
 
   // ==========================================
-  // 7. DRAFT PAGE
+  // 10. DRAFT PAGE
   // ==========================================
+
   return (
     <DraftPage
       players={players}
       captains={captains}
       teams={teams}
       selectPlayer={selectPlayer}
-      onBack={() => {
-        setIsDraftStarted(false);
-      }}
+      activeCaptainId={
+        activeCaptainId
+      }
+      onBack={handleLogout}
     />
   );
 }

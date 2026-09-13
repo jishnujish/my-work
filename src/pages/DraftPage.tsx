@@ -1,4 +1,8 @@
-import type { Player, Captain, Teams } from "../types";
+import type {
+  Player,
+  Captain,
+  Teams,
+} from "../types";
 
 type DraftPageProps = {
   players: Player[];
@@ -10,6 +14,8 @@ type DraftPageProps = {
     captainId: string
   ) => void;
 
+  activeCaptainId: string;
+
   onBack: () => void;
 };
 
@@ -18,95 +24,184 @@ function DraftPage({
   captains,
   teams,
   selectPlayer,
+  activeCaptainId,
   onBack,
 }: DraftPageProps) {
+  // ==========================================
+  // AVAILABLE PLAYERS
+  // ==========================================
 
-  // Only available players should be displayed
   const availablePlayers = players.filter(
-    (player) => player.status === "available"
+    (player) =>
+      player.status === "available"
+  );
+
+  // ==========================================
+  // ACTIVE CAPTAIN
+  // ==========================================
+
+  const activeCaptain = captains.find(
+    (captain) =>
+      captain.id === activeCaptainId
   );
 
   return (
     <div className="app">
-      <h1 className="headers">🏏 Player Selection</h1>
+
+      {/* ================================= */}
+      {/* HEADER */}
+      {/* ================================= */}
+
+      <h1 className="headers">
+        🏏 Player Selection
+      </h1>
+
+      {/* ================================= */}
+      {/* CURRENT TURN */}
+      {/* ================================= */}
+
+      {activeCaptain && (
+        <h2 className="headers">
+          🎯 {activeCaptain.name}'s Turn
+        </h2>
+      )}
 
       <div className="draft-page">
 
-        {/* Available Players */}
+        {/* ================================= */}
+        {/* AVAILABLE PLAYERS */}
+        {/* ================================= */}
+
         <section className="card available">
+
           <h2 className="headers">
             🏏 Available Players
           </h2>
 
           {availablePlayers.length === 0 ? (
-            <p>All players have been selected 🎉</p>
+            <p>
+              All players have been selected 🎉
+            </p>
           ) : (
-            availablePlayers.map((player) => (
-              <div
-                className="player-card"
-                key={player.id}
-              >
-                <strong className="headers">
-                  {player.name}
-                </strong>
+            availablePlayers.map(
+              (player) => (
+                <div
+                  className="player-card"
+                  key={player.id}
+                >
 
-                <div className="captain-buttons">
-                  {captains.map((captain) => (
-                    <button
-                      key={captain.id}
-                      onClick={() =>
-                        selectPlayer(
-                          player,
-                          captain.id
-                        )
+                  {/* PLAYER NAME */}
+
+                  <strong className="headers">
+                    {player.name}
+                  </strong>
+
+                  {/* CAPTAIN BUTTONS */}
+
+                  <div className="captain-buttons">
+
+                    {captains.map(
+                      (captain) => {
+
+                        const isActive =
+                          captain.id ===
+                          activeCaptainId;
+
+                        return (
+                          <button
+                            key={captain.id}
+
+                            disabled={!isActive}
+
+                            className={
+                              isActive
+                                ? "active-captain-button"
+                                : "inactive-captain-button"
+                            }
+
+                            onClick={() =>
+                              selectPlayer(
+                                player,
+                                captain.id
+                              )
+                            }
+                          >
+                            {captain.name}
+                          </button>
+                        );
                       }
-                    >
-                      {captain.name}
-                    </button>
-                  ))}
+                    )}
+
+                  </div>
+
                 </div>
-              </div>
-            ))
+              )
+            )
           )}
+
         </section>
 
-        {/* Teams */}
-        <section className="teams-container">
-          {captains.map((captain) => (
-            <div
-              className="card team"
-              key={captain.id}
-            >
-              <h2 className="headers">
-                👑 {captain.name}
-              </h2>
+        {/* ================================= */}
+        {/* TEAMS */}
+        {/* ================================= */}
 
-              {teams[captain.id]?.length ? (
-                teams[captain.id].map((player) => (
-                  <div
-                    className="headers"
-                    key={player.id}
-                  >
-                    {player.name}
-                  </div>
-                ))
-              ) : (
-                <p className="headers">
-                  No players selected
-                </p>
-              )}
-            </div>
-          ))}
+        <section className="teams-container">
+
+          {captains.map(
+            (captain) => (
+              <div
+                className="card team"
+                key={captain.id}
+              >
+
+                {/* CAPTAIN NAME */}
+
+                <h2 className="headers">
+                  👑 {captain.name}
+                </h2>
+
+                {/* SELECTED PLAYERS */}
+
+                {teams[captain.id]?.length ? (
+
+                  teams[captain.id].map(
+                    (player, index) => (
+                      <div
+                        className="headers"
+                        key={player.id}
+                      >
+                        {index + 1}. {player.name}
+                      </div>
+                    )
+                  )
+
+                ) : (
+
+                  <p className="headers">
+                    No players selected
+                  </p>
+
+                )}
+
+              </div>
+            )
+          )}
+
         </section>
 
       </div>
+
+      {/* ================================= */}
+      {/* LOGOUT */}
+      {/* ================================= */}
 
       <button
         className="back-button"
         onClick={onBack}
       >
-        ← Back to Admin
+        🚪 Logout
       </button>
+
     </div>
   );
 }

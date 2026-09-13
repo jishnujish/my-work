@@ -94,3 +94,17 @@ button:hover {
     flex-direction: column;
   }
 }
+
+.active-captain-button {
+  background-color: green;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+.inactive-captain-button {
+  background-color: red;
+  color: white;
+  border: none;
+  cursor: not-allowed;
+}

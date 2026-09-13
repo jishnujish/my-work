@@ -1,15 +1,27 @@
 import { useState } from "react";
-import type { Player, Captain } from "../types";
+
+import type {
+  Player,
+  Captain,
+} from "../types";
+
 import { supabase } from "../lib/supabase";
 
 type AdminPageProps = {
   players: Player[];
   captains: Captain[];
 
-  setPlayers: React.Dispatch<React.SetStateAction<Player[]>>;
-  setCaptains: React.Dispatch<React.SetStateAction<Captain[]>>;
+  setPlayers: React.Dispatch<
+    React.SetStateAction<Player[]>
+  >;
+
+  setCaptains: React.Dispatch<
+    React.SetStateAction<Captain[]>
+  >;
 
   onStartDraft: () => void;
+
+  onLogout: () => void;
 };
 
 function AdminPage({
@@ -18,19 +30,30 @@ function AdminPage({
   setPlayers,
   setCaptains,
   onStartDraft,
+  onLogout,
 }: AdminPageProps) {
-  const [playerName, setPlayerName] = useState("");
-  const [playerList, setPlayerList] = useState("");
+  const [playerName, setPlayerName] =
+    useState("");
 
-  const [captainName, setCaptainName] = useState("");
+  const [playerList, setPlayerList] =
+    useState("");
 
-  // Add Single Player
+  const [captainName, setCaptainName] =
+    useState("");
+
+  // ==========================================
+  // ADD SINGLE PLAYER
+  // ==========================================
+
   const addPlayer = async () => {
     const name = playerName.trim();
 
     if (!name) return;
 
-    const { data, error } = await supabase
+    const {
+      data,
+      error,
+    } = await supabase
       .from("players")
       .insert({
         name: name,
@@ -40,84 +63,142 @@ function AdminPage({
       .single();
 
     if (error) {
-      console.error("Add player error:", error);
-      alert("Failed to add player");
+      console.error(
+        "Add player error:",
+        error
+      );
+
+      alert(
+        "Failed to add player"
+      );
+
       return;
     }
 
     if (data) {
-      setPlayers((current) => [...current, data]);
+      setPlayers((current) => [
+        ...current,
+        data,
+      ]);
     }
 
     setPlayerName("");
   };
 
-  // Add Multiple Players
+  // ==========================================
+  // ADD MULTIPLE PLAYERS
+  // ==========================================
+
   const addMultiplePlayers = async () => {
     const names = playerList
       .split("\n")
       .map((line) =>
         line
-          .replace(/^\s*\d+[\.\)]\s*/, "")
+          .replace(
+            /^\s*\d+[.)]\s*/,
+            ""
+          )
           .trim()
       )
       .filter(Boolean);
 
     if (names.length === 0) {
-      alert("Please enter player names");
+      alert(
+        "Please enter player names"
+      );
+
       return;
     }
 
-    const playersToInsert = names.map((name) => ({
-      name: name,
-      status: "available",
-    }));
+    const playersToInsert =
+      names.map((name) => ({
+        name: name,
+        status: "available" as const,
+      }));
 
-    const { data, error } = await supabase
+    const {
+      data,
+      error,
+    } = await supabase
       .from("players")
       .insert(playersToInsert)
       .select();
 
     if (error) {
-      console.error("Add players error:", error);
-      alert("Failed to add players");
+      console.error(
+        "Add players error:",
+        error
+      );
+
+      alert(
+        "Failed to add players"
+      );
+
       return;
     }
 
     if (data) {
-      setPlayers((current) => [...current, ...data]);
+      setPlayers((current) => [
+        ...current,
+        ...data,
+      ]);
     }
 
     setPlayerList("");
 
-    alert(`${data?.length || 0} players added successfully`);
+    alert(
+      `${data?.length || 0} players added successfully`
+    );
   };
 
-  // Delete Player
-  const removePlayer = async (id: string) => {
-    const { error } = await supabase
-      .from("players")
-      .delete()
-      .eq("id", id);
+  // ==========================================
+  // DELETE PLAYER
+  // ==========================================
+
+  const removePlayer = async (
+    id: string
+  ) => {
+    const { error } =
+      await supabase
+        .from("players")
+        .delete()
+        .eq("id", id);
 
     if (error) {
-      console.error("Delete player error:", error);
-      alert("Failed to delete player");
+      console.error(
+        "Delete player error:",
+        error
+      );
+
+      alert(
+        "Failed to delete player"
+      );
+
       return;
     }
 
     setPlayers((current) =>
-      current.filter((player) => player.id !== id)
+      current.filter(
+        (player) =>
+          player.id !== id
+      )
     );
   };
 
-  // Add Captain
+  // ==========================================
+  // ADD CAPTAIN
+  // ==========================================
+
   const addCaptain = async () => {
-    const name = captainName.trim();
+    const name =
+      captainName.trim();
 
     if (!name) return;
 
-    const { data, error } = await supabase
+    const {
+      data,
+      error,
+    } = await supabase
       .from("captains")
       .insert({
         name: name,
@@ -126,69 +207,123 @@ function AdminPage({
       .single();
 
     if (error) {
-      console.error("Add captain error:", error);
-      alert("Failed to add captain");
+      console.error(
+        "Add captain error:",
+        error
+      );
+
+      alert(
+        "Failed to add captain"
+      );
+
       return;
     }
 
     if (data) {
-      setCaptains((current) => [...current, data]);
+      setCaptains((current) => [
+        ...current,
+        data,
+      ]);
     }
 
     setCaptainName("");
   };
 
-  // Delete Captain
-  const removeCaptain = async (id: string) => {
-    const { error } = await supabase
-      .from("captains")
-      .delete()
-      .eq("id", id);
+  // ==========================================
+  // DELETE CAPTAIN
+  // ==========================================
+
+  const removeCaptain = async (
+    id: string
+  ) => {
+    const { error } =
+      await supabase
+        .from("captains")
+        .delete()
+        .eq("id", id);
 
     if (error) {
-      console.error("Delete captain error:", error);
-      alert("Failed to delete captain");
+      console.error(
+        "Delete captain error:",
+        error
+      );
+
+      alert(
+        "Failed to delete captain"
+      );
+
       return;
     }
 
     setCaptains((current) =>
-      current.filter((captain) => captain.id !== id)
+      current.filter(
+        (captain) =>
+          captain.id !== id
+      )
     );
   };
 
   return (
     <div className="app">
-      <h1 className="headers">🏏 OCL Team Selection</h1>
+
+      {/* ================================= */}
+      {/* HEADER */}
+      {/* ================================= */}
+
+      <h1 className="headers">
+        🏏 OCL Team Selection
+      </h1>
+
+      {/* ================================= */}
+      {/* PLAYERS + CAPTAINS */}
+      {/* ================================= */}
 
       <div className="admin-container">
 
-        {/* Players */}
-        <section className="card">
-          <h2 className="headers">👤 Players</h2>
+        {/* ================================= */}
+        {/* PLAYERS */}
+        {/* ================================= */}
 
-          {/* Single Player */}
+        <section className="card">
+
+          <h2 className="headers">
+            👤 Players
+          </h2>
+
+          {/* SINGLE PLAYER */}
+
           <div className="add-row">
+
             <input
               type="text"
               placeholder="Enter player name"
               value={playerName}
               onChange={(e) =>
-                setPlayerName(e.target.value)
+                setPlayerName(
+                  e.target.value
+                )
               }
               onKeyDown={(e) => {
-                if (e.key === "Enter") {
+                if (
+                  e.key === "Enter"
+                ) {
                   addPlayer();
                 }
               }}
             />
 
-            <button onClick={addPlayer}>
+            <button
+              onClick={addPlayer}
+            >
               + Add Player
             </button>
+
           </div>
 
-          {/* Multiple Players */}
+          {/* MULTIPLE PLAYERS */}
+
           <div className="add-row">
+
             <textarea
               rows={5}
               placeholder={`1. Jishnu
@@ -197,104 +332,160 @@ function AdminPage({
 4. Rahul`}
               value={playerList}
               onChange={(e) =>
-                setPlayerList(e.target.value)
+                setPlayerList(
+                  e.target.value
+                )
               }
             />
 
-            <button onClick={addMultiplePlayers}>
+            <button
+              onClick={
+                addMultiplePlayers
+              }
+            >
               + Add List
             </button>
+
           </div>
 
-          {/* Players List */}
-          {players.length === 0 ? (
-            <p className="empty">No players added</p>
-          ) : (
-            players.map((player, index) => (
-              <div
-                className="list-item"
-                key={player.id}
-              >
-                <span>
-                  {index + 1}. {player.name}
-                </span>
+          {/* PLAYERS LIST */}
 
-                <button
-                  className="delete-button"
-                  onClick={() =>
-                    removePlayer(player.id)
-                  }
+          {players.length === 0 ? (
+            <p className="empty">
+              No players added
+            </p>
+          ) : (
+            players.map(
+              (player, index) => (
+                <div
+                  className="list-item"
+                  key={player.id}
                 >
-                  Delete
-                </button>
-              </div>
-            ))
+
+                  <span>
+                    {index + 1}.{" "}
+                    {player.name}
+                  </span>
+
+                  <button
+                    className="delete-button"
+                    onClick={() =>
+                      removePlayer(
+                        player.id
+                      )
+                    }
+                  >
+                    Delete
+                  </button>
+
+                </div>
+              )
+            )
           )}
+
         </section>
 
-        {/* Captains */}
+        {/* ================================= */}
+        {/* CAPTAINS */}
+        {/* ================================= */}
+
         <section className="card">
-          <h2 className="headers">👑 Captains</h2>
+
+          <h2 className="headers">
+            👑 Captains
+          </h2>
 
           <div className="add-row">
+
             <input
               type="text"
               placeholder="Enter captain name"
               value={captainName}
               onChange={(e) =>
-                setCaptainName(e.target.value)
+                setCaptainName(
+                  e.target.value
+                )
               }
               onKeyDown={(e) => {
-                if (e.key === "Enter") {
+                if (
+                  e.key === "Enter"
+                ) {
                   addCaptain();
                 }
               }}
             />
 
-            <button onClick={addCaptain}>
+            <button
+              onClick={addCaptain}
+            >
               + Add Captain
             </button>
+
           </div>
 
           {captains.length === 0 ? (
-            <p className="empty">No captains added</p>
+            <p className="empty">
+              No captains added
+            </p>
           ) : (
-            captains.map((captain, index) => (
-              <div
-                className="list-item"
-                key={captain.id}
-              >
-                <span>
-                  👑 {index + 1}. {captain.name}
-                </span>
-
-                <button
-                  className="delete-button"
-                  onClick={() =>
-                    removeCaptain(captain.id)
-                  }
+            captains.map(
+              (captain, index) => (
+                <div
+                  className="list-item"
+                  key={captain.id}
                 >
-                  Delete
-                </button>
-              </div>
-            ))
+
+                  <span>
+                    👑 {index + 1}.{" "}
+                    {captain.name}
+                  </span>
+
+                  <button
+                    className="delete-button"
+                    onClick={() =>
+                      removeCaptain(
+                        captain.id
+                      )
+                    }
+                  >
+                    Delete
+                  </button>
+
+                </div>
+              )
+            )
           )}
+
         </section>
+
       </div>
 
-      {/* Start Draft */}
+      {/* ================================= */}
+      {/* START + LOGOUT */}
+      {/* ================================= */}
+
       <div className="start-container">
+
         <button
           className="start-button"
           disabled={
             players.length === 0 ||
-            captains.length === 0
+            captains.length !== 2
           }
           onClick={onStartDraft}
         >
           🚀 START Selection
         </button>
+
+        <button
+          className="back-button"
+          onClick={onLogout}
+        >
+          🚪 Logout
+        </button>
+
       </div>
+
     </div>
   );
 }
