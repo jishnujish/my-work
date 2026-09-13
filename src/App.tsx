@@ -442,7 +442,7 @@ function App() {
   // 9. ADMIN PAGE
   // ==========================================
 
-  if (isAdmin) {
+  if (isAdmin && !isDraftStarted) {
     return (
       <AdminPage
         players={players}
