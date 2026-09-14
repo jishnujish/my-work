@@ -117,7 +117,7 @@ function LoginPage({ onLogin }: LoginPageProps) {
         </div>
 
         <p className="copyright">
-          © 2026 OCL • Online Cricket League
+          © 2026 OCL • Ozone Cricket League
         </p>
       </div>
     </div>
