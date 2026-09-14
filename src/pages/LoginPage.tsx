@@ -37,7 +37,7 @@ function LoginPage({ onLogin }: LoginPageProps) {
 
           <h1>OCL</h1>
 
-          <p>Online Cricket League</p>
+          <p>Ozone Cricket League</p>
         </div>
 
         {/* Login Card */}
