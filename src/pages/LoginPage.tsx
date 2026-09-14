@@ -25,46 +25,100 @@ function LoginPage({ onLogin }: LoginPageProps) {
   };
 
   return (
-    <div className="app">
-      <div className="card login-card">
-        <h1 className="headers">
-          🏏 OCL Login
-        </h1>
+    <div className="login-page">
+      {/* Background decoration */}
+      <div className="login-bg-circle circle-one"></div>
+      <div className="login-bg-circle circle-two"></div>
 
-        <form onSubmit={handleSubmit}>
-          <div className="login-field">
-            <label>Username</label>
+      <div className="login-container">
+        {/* Logo / Header */}
+        <div className="login-header">
+          <div className="cricket-logo">🏏</div>
 
-            <input
-              type="text"
-              placeholder="Enter username"
-              value={username}
-              onChange={(e) =>
-                setUsername(e.target.value)
-              }
-            />
+          <h1>OCL</h1>
+
+          <p>Online Cricket League</p>
+        </div>
+
+        {/* Login Card */}
+        <div className="login-card">
+          <div className="login-title">
+            <h2>Welcome Back 👋</h2>
+
+            <p>
+              Login to continue to your
+              <br />
+              cricket league
+            </p>
           </div>
 
-          <div className="login-field">
-            <label>Password</label>
+          <form onSubmit={handleSubmit}>
+            {/* Username */}
+            <div className="login-field">
+              <label htmlFor="username">
+                Username
+              </label>
 
-            <input
-              type="password"
-              placeholder="Enter password"
-              value={password}
-              onChange={(e) =>
-                setPassword(e.target.value)
-              }
-            />
+              <div className="input-wrapper">
+                <span className="input-icon">
+                  👤
+                </span>
+
+                <input
+                  id="username"
+                  type="text"
+                  placeholder="Enter your username"
+                  value={username}
+                  onChange={(e) =>
+                    setUsername(e.target.value)
+                  }
+                />
+              </div>
+            </div>
+
+            {/* Password */}
+            <div className="login-field">
+              <label htmlFor="password">
+                Password
+              </label>
+
+              <div className="input-wrapper">
+                <span className="input-icon">
+                  🔒
+                </span>
+
+                <input
+                  id="password"
+                  type="password"
+                  placeholder="Enter your password"
+                  value={password}
+                  onChange={(e) =>
+                    setPassword(e.target.value)
+                  }
+                />
+              </div>
+            </div>
+
+            {/* Login Button */}
+            <button
+              type="submit"
+              className="login-button"
+            >
+              <span>🔐</span>
+              Login
+            </button>
+          </form>
+
+          <div className="login-footer">
+            <span>🏏</span>
+            <p>Play • Draft • Win</p>
+            <span>🏆</span>
           </div>
+        </div>
 
-          <button
-            type="submit"
-            className="start-button"
-          >
-            🔐 Login
-          </button>
-        </form>
+        <p className="copyright">
+          © 2026 OCL • Online Cricket League
+        </p>
       </div>
     </div>
   );

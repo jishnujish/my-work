@@ -108,3 +108,562 @@ button:hover {
   border: none;
   cursor: not-allowed;
 }
+/* =========================================
+   LOGIN PAGE
+========================================= */
+
+.login-page {
+  min-height: 100vh;
+  min-height: 100dvh;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 30px 20px;
+
+  position: relative;
+  overflow: hidden;
+
+  background:
+    radial-gradient(
+      circle at top left,
+      rgba(34, 197, 94, 0.18),
+      transparent 35%
+    ),
+    radial-gradient(
+      circle at bottom right,
+      rgba(16, 185, 129, 0.15),
+      transparent 35%
+    ),
+    linear-gradient(
+      135deg,
+      #071a12 0%,
+      #0b2a1b 50%,
+      #06140d 100%
+    );
+
+  box-sizing: border-box;
+}
+
+
+/* =========================================
+   BACKGROUND CIRCLES
+========================================= */
+
+.login-bg-circle {
+  position: absolute;
+
+  border-radius: 50%;
+
+  pointer-events: none;
+
+  filter: blur(2px);
+}
+
+.circle-one {
+  width: 320px;
+  height: 320px;
+
+  top: -140px;
+  left: -100px;
+
+  background: rgba(34, 197, 94, 0.12);
+}
+
+.circle-two {
+  width: 400px;
+  height: 400px;
+
+  bottom: -180px;
+  right: -140px;
+
+  background: rgba(16, 185, 129, 0.1);
+}
+
+
+/* =========================================
+   MAIN CONTAINER
+========================================= */
+
+.login-container {
+  width: 100%;
+  max-width: 430px;
+
+  position: relative;
+  z-index: 2;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+
+/* =========================================
+   LOGIN HEADER
+========================================= */
+
+.login-header {
+  text-align: center;
+
+  margin-bottom: 24px;
+}
+
+.cricket-logo {
+  width: 72px;
+  height: 72px;
+
+  margin: 0 auto 12px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 22px;
+
+  font-size: 38px;
+
+  background: rgba(255, 255, 255, 0.1);
+
+  border: 1px solid rgba(255, 255, 255, 0.15);
+
+  box-shadow:
+    0 12px 30px rgba(0, 0, 0, 0.25),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+
+  backdrop-filter: blur(12px);
+}
+
+.login-header h1 {
+  margin: 0;
+
+  color: #ffffff;
+
+  font-size: 38px;
+
+  font-weight: 800;
+
+  letter-spacing: 4px;
+}
+
+.login-header p {
+  margin: 5px 0 0;
+
+  color: #9fc8b0;
+
+  font-size: 14px;
+
+  letter-spacing: 1px;
+}
+
+
+/* =========================================
+   LOGIN CARD
+========================================= */
+
+.login-card {
+  width: 100%;
+
+  padding: 32px;
+
+  box-sizing: border-box;
+
+  border-radius: 24px;
+
+  background: rgba(255, 255, 255, 0.96);
+
+  border: 1px solid rgba(255, 255, 255, 0.4);
+
+  box-shadow:
+    0 25px 60px rgba(0, 0, 0, 0.35),
+    0 8px 20px rgba(0, 0, 0, 0.15);
+
+  backdrop-filter: blur(20px);
+}
+
+
+/* =========================================
+   LOGIN TITLE
+========================================= */
+
+.login-title {
+  text-align: center;
+
+  margin-bottom: 28px;
+}
+
+.login-title h2 {
+  margin: 0 0 8px;
+
+  color: #123b26;
+
+  font-size: 24px;
+
+  font-weight: 750;
+}
+
+.login-title p {
+  margin: 0;
+
+  color: #718077;
+
+  font-size: 14px;
+
+  line-height: 1.6;
+}
+
+
+/* =========================================
+   FORM FIELD
+========================================= */
+
+.login-field {
+  margin-bottom: 20px;
+}
+
+.login-field label {
+  display: block;
+
+  margin-bottom: 8px;
+
+  color: #234232;
+
+  font-size: 14px;
+
+  font-weight: 650;
+}
+
+
+/* =========================================
+   INPUT
+========================================= */
+
+.input-wrapper {
+  position: relative;
+
+  width: 100%;
+}
+
+.input-icon {
+  position: absolute;
+
+  left: 15px;
+  top: 50%;
+
+  transform: translateY(-50%);
+
+  font-size: 18px;
+
+  pointer-events: none;
+
+  z-index: 1;
+}
+
+.input-wrapper input {
+  width: 100%;
+
+  height: 52px;
+
+  box-sizing: border-box;
+
+  padding: 0 15px 0 48px;
+
+  border: 1.5px solid #dce5df;
+
+  border-radius: 13px;
+
+  outline: none;
+
+  background: #f8faf9;
+
+  color: #193526;
+
+  font-size: 15px;
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    background 0.2s ease;
+}
+
+.input-wrapper input::placeholder {
+  color: #9aa8a0;
+}
+
+.input-wrapper input:focus {
+  border-color: #22a35a;
+
+  background: #ffffff;
+
+  box-shadow:
+    0 0 0 4px rgba(34, 163, 90, 0.12);
+}
+
+
+/* =========================================
+   LOGIN BUTTON
+========================================= */
+
+.login-button {
+  width: 100%;
+
+  height: 54px;
+
+  margin-top: 8px;
+
+  border: none;
+
+  border-radius: 13px;
+
+  cursor: pointer;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  gap: 9px;
+
+  color: white;
+
+  font-size: 16px;
+
+  font-weight: 700;
+
+  background:
+    linear-gradient(
+      135deg,
+      #16a34a,
+      #15803d
+    );
+
+  box-shadow:
+    0 8px 20px rgba(22, 163, 74, 0.25);
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    filter 0.2s ease;
+}
+
+.login-button:hover {
+  transform: translateY(-2px);
+
+  box-shadow:
+    0 12px 26px rgba(22, 163, 74, 0.32);
+
+  filter: brightness(1.05);
+}
+
+.login-button:active {
+  transform: translateY(0);
+
+  box-shadow:
+    0 5px 12px rgba(22, 163, 74, 0.2);
+}
+
+
+/* =========================================
+   FOOTER INSIDE CARD
+========================================= */
+
+.login-footer {
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  gap: 10px;
+
+  margin-top: 24px;
+}
+
+.login-footer p {
+  margin: 0;
+
+  color: #8a978f;
+
+  font-size: 12px;
+
+  font-weight: 600;
+
+  letter-spacing: 0.8px;
+}
+
+
+/* =========================================
+   COPYRIGHT
+========================================= */
+
+.copyright {
+  margin: 20px 0 0;
+
+  color: rgba(255, 255, 255, 0.55);
+
+  font-size: 11px;
+
+  text-align: center;
+}
+
+
+/* =========================================
+   MOBILE RESPONSIVE
+========================================= */
+
+@media (max-width: 600px) {
+  .login-page {
+    padding: 20px 16px;
+  }
+
+  .login-container {
+    max-width: 100%;
+  }
+
+  .login-header {
+    margin-bottom: 20px;
+  }
+
+  .cricket-logo {
+    width: 62px;
+    height: 62px;
+
+    border-radius: 18px;
+
+    font-size: 32px;
+  }
+
+  .login-header h1 {
+    font-size: 32px;
+  }
+
+  .login-header p {
+    font-size: 12px;
+  }
+
+  .login-card {
+    padding: 25px 20px;
+
+    border-radius: 20px;
+  }
+
+  .login-title {
+    margin-bottom: 24px;
+  }
+
+  .login-title h2 {
+    font-size: 21px;
+  }
+
+  .login-title p {
+    font-size: 13px;
+  }
+
+  .login-field {
+    margin-bottom: 17px;
+  }
+
+  .input-wrapper input {
+    height: 50px;
+
+    font-size: 14px;
+  }
+
+  .login-button {
+    height: 52px;
+
+    font-size: 15px;
+  }
+}
+
+
+/* =========================================
+   SMALL MOBILE
+========================================= */
+
+@media (max-width: 380px) {
+  .login-page {
+    padding: 16px 12px;
+  }
+
+  .login-card {
+    padding: 22px 16px;
+
+    border-radius: 18px;
+  }
+
+  .cricket-logo {
+    width: 56px;
+    height: 56px;
+
+    font-size: 28px;
+  }
+
+  .login-header h1 {
+    font-size: 28px;
+  }
+
+  .login-title h2 {
+    font-size: 19px;
+  }
+}
+
+
+/* =========================================
+   LANDSCAPE MOBILE
+========================================= */
+
+@media (
+  max-height: 650px
+) and (orientation: landscape) {
+  .login-page {
+    align-items: flex-start;
+
+    overflow-y: auto;
+
+    padding-top: 20px;
+    padding-bottom: 20px;
+  }
+
+  .login-header {
+    margin-bottom: 15px;
+  }
+
+  .cricket-logo {
+    width: 50px;
+    height: 50px;
+
+    font-size: 25px;
+  }
+
+  .login-header h1 {
+    font-size: 25px;
+  }
+
+  .login-card {
+    padding: 20px;
+  }
+
+  .login-title {
+    margin-bottom: 15px;
+  }
+
+  .login-field {
+    margin-bottom: 12px;
+  }
+
+  .input-wrapper input {
+    height: 45px;
+  }
+
+  .login-button {
+    height: 46px;
+  }
+
+  .login-footer {
+    margin-top: 15px;
+  }
+
+  .copyright {
+    margin-top: 10px;
+  }
+}

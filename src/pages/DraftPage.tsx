@@ -14,6 +14,12 @@ type DraftPageProps = {
     captainId: string
   ) => void;
 
+  // ==========================================
+  // UNDO
+  // ==========================================
+
+  undoLastSelection: () => void;
+
   activeCaptainId: string;
 
   onBack: () => void;
@@ -24,9 +30,11 @@ function DraftPage({
   captains,
   teams,
   selectPlayer,
+  undoLastSelection,
   activeCaptainId,
   onBack,
 }: DraftPageProps) {
+
   // ==========================================
   // AVAILABLE PLAYERS
   // ==========================================
@@ -66,6 +74,17 @@ function DraftPage({
         </h2>
       )}
 
+      {/* ================================= */}
+      {/* UNDO BUTTON */}
+      {/* ================================= */}
+
+      <button
+        className="undo-button"
+        onClick={undoLastSelection}
+      >
+        ↩️ Undo Last Selection
+      </button>
+
       <div className="draft-page">
 
         {/* ================================= */}
@@ -79,12 +98,16 @@ function DraftPage({
           </h2>
 
           {availablePlayers.length === 0 ? (
+
             <p>
               All players have been selected 🎉
             </p>
+
           ) : (
+
             availablePlayers.map(
               (player) => (
+
                 <div
                   className="player-card"
                   key={player.id}
@@ -96,7 +119,9 @@ function DraftPage({
                     {player.name}
                   </strong>
 
+                  {/* ================================= */}
                   {/* CAPTAIN BUTTONS */}
+                  {/* ================================= */}
 
                   <div className="captain-buttons">
 
@@ -129,14 +154,17 @@ function DraftPage({
                             {captain.name}
                           </button>
                         );
+
                       }
                     )}
 
                   </div>
 
                 </div>
+
               )
             )
+
           )}
 
         </section>
@@ -149,6 +177,7 @@ function DraftPage({
 
           {captains.map(
             (captain) => (
+
               <div
                 className="card team"
                 key={captain.id}
@@ -160,18 +189,22 @@ function DraftPage({
                   👑 {captain.name}
                 </h2>
 
+                {/* ================================= */}
                 {/* SELECTED PLAYERS */}
+                {/* ================================= */}
 
                 {teams[captain.id]?.length ? (
 
                   teams[captain.id].map(
                     (player, index) => (
+
                       <div
                         className="headers"
                         key={player.id}
                       >
                         {index + 1}. {player.name}
                       </div>
+
                     )
                   )
 
@@ -184,6 +217,7 @@ function DraftPage({
                 )}
 
               </div>
+
             )
           )}
 
