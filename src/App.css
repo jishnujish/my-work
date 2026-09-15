@@ -1,155 +1,1084 @@
+/* =========================================================
+   GLOBAL
+========================================================= */
+
 * {
+  margin: 0;
+  padding: 0;
   box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 body {
   margin: 0;
-  font-family: Arial, sans-serif;
-  background: #f3f4f6;
+
+  font-family:
+    Inter,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Arial,
+    sans-serif;
+
+  background: #07111f;
+
+  color: #ffffff;
+
+  min-height: 100vh;
 }
+
+
+/* =========================================================
+   MAIN APP
+========================================================= */
 
 .app {
-  max-width: 1100px;
-  margin: auto;
-  padding: 30px 20px;
+  min-height: 100vh;
+
+  width: 100%;
+
+  padding: 35px 30px 50px;
+
+  position: relative;
+
+  overflow-x: hidden;
+
+  background:
+    radial-gradient(
+      circle at 0% 0%,
+      rgba(37, 99, 235, 0.18),
+      transparent 30%
+    ),
+    radial-gradient(
+      circle at 100% 100%,
+      rgba(220, 38, 38, 0.16),
+      transparent 30%
+    ),
+    linear-gradient(
+      135deg,
+      #07111f 0%,
+      #0b1728 50%,
+      #080f1b 100%
+    );
 }
 
-h1 {
+
+/* Background decoration */
+
+.app::before {
+  content: "";
+
+  position: fixed;
+
+  width: 350px;
+  height: 350px;
+
+  border-radius: 50%;
+
+  top: -150px;
+  left: -120px;
+
+  background:
+    rgba(37, 99, 235, 0.1);
+
+  filter: blur(5px);
+
+  pointer-events: none;
+}
+
+.app::after {
+  content: "";
+
+  position: fixed;
+
+  width: 350px;
+  height: 350px;
+
+  border-radius: 50%;
+
+  bottom: -160px;
+  right: -120px;
+
+  background:
+    rgba(220, 38, 38, 0.09);
+
+  filter: blur(5px);
+
+  pointer-events: none;
+}
+
+
+/* =========================================================
+   HEADERS
+========================================================= */
+
+.headers {
+  color: #ffffff;
+}
+
+h1.headers {
   text-align: center;
-  margin-bottom: 30px;
+
+  font-size: 34px;
+
+  font-weight: 800;
+
+  letter-spacing: 0.5px;
+
+  margin-bottom: 35px;
+
+  background:
+    linear-gradient(
+      90deg,
+      #60a5fa,
+      #ffffff,
+      #f87171
+    );
+
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
-.admin-container {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 25px;
-}
+h2.headers {
+  font-size: 21px;
 
-.card {
-  background: white;
-  padding: 25px;
-  border-radius: 15px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
-}
+  font-weight: 750;
 
-.card h2 {
-  margin-top: 0;
-}
-
-.add-row {
-  display: flex;
-  gap: 10px;
   margin-bottom: 20px;
 }
 
-.add-row input {
-  flex: 1;
-  padding: 12px;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  font-size: 15px;
+
+/* =========================================================
+   COMMON CARD
+========================================================= */
+
+.card {
+  position: relative;
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(255, 255, 255, 0.09),
+      rgba(255, 255, 255, 0.035)
+    );
+
+  border: 1px solid rgba(255, 255, 255, 0.1);
+
+  border-radius: 20px;
+
+  padding: 24px;
+
+  box-shadow:
+    0 20px 50px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04);
+
+  backdrop-filter: blur(18px);
+
+  -webkit-backdrop-filter: blur(18px);
+
+  transition:
+    transform 0.25s ease,
+    border-color 0.25s ease,
+    box-shadow 0.25s ease;
 }
+
+.card:hover {
+  border-color:
+    rgba(96, 165, 250, 0.3);
+
+  box-shadow:
+    0 25px 55px rgba(0, 0, 0, 0.35),
+    0 0 30px rgba(37, 99, 235, 0.06);
+}
+
+
+/* =========================================================
+   ADMIN CONTAINER
+========================================================= */
+
+.admin-container {
+  width: 100%;
+
+  max-width: 1200px;
+
+  margin: 0 auto;
+
+  display: grid;
+
+  grid-template-columns:
+    minmax(0, 1fr)
+    minmax(0, 1fr);
+
+  gap: 25px;
+
+  position: relative;
+
+  z-index: 1;
+}
+
+
+/* =========================================================
+   ADD ROW
+========================================================= */
+
+.add-row {
+  display: flex;
+
+  gap: 10px;
+
+  margin-bottom: 18px;
+}
+
+
+/* Inputs */
+
+.add-row input,
+.add-row textarea {
+  flex: 1;
+
+  width: 100%;
+
+  border: 1px solid rgba(255, 255, 255, 0.12);
+
+  border-radius: 12px;
+
+  background:
+    rgba(0, 0, 0, 0.25);
+
+  color: #ffffff;
+
+  outline: none;
+
+  font-size: 15px;
+
+  padding: 12px 14px;
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    background 0.2s ease;
+}
+
+.add-row input {
+  height: 46px;
+}
+
+.add-row textarea {
+  resize: vertical;
+
+  min-height: 110px;
+}
+
+.add-row input::placeholder,
+.add-row textarea::placeholder {
+  color:
+    rgba(255, 255, 255, 0.4);
+}
+
+.add-row input:focus,
+.add-row textarea:focus {
+  border-color:
+    rgba(96, 165, 250, 0.75);
+
+  background:
+    rgba(0, 0, 0, 0.35);
+
+  box-shadow:
+    0 0 0 3px rgba(37, 99, 235, 0.14);
+}
+
+
+/* =========================================================
+   DEFAULT BUTTON
+========================================================= */
 
 button {
   border: none;
-  border-radius: 8px;
+
+  border-radius: 10px;
+
   padding: 10px 14px;
+
   cursor: pointer;
-  background: #2563eb;
-  color: white;
+
+  color: #ffffff;
+
+  background:
+    linear-gradient(
+      135deg,
+      #2563eb,
+      #1d4ed8
+    );
+
+  font-weight: 700;
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    filter 0.2s ease;
 }
 
-.headers{
-  color: black;
-}
 button:hover {
-  opacity: 0.9;
+  filter: brightness(1.08);
+
+  transform: translateY(-1px);
 }
+
+button:active {
+  transform: translateY(0);
+}
+
+
+/* =========================================================
+   ADD BUTTON
+========================================================= */
+
+.add-row button {
+  min-width: 135px;
+
+  border-radius: 12px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #3b82f6,
+      #1d4ed8
+    );
+
+  box-shadow:
+    0 8px 20px rgba(37, 99, 235, 0.22);
+}
+
+.add-row button:hover {
+  box-shadow:
+    0 12px 25px rgba(37, 99, 235, 0.35);
+}
+
+
+/* =========================================================
+   PLAYER / CAPTAIN LIST
+========================================================= */
 
 .list-item {
   display: flex;
-  justify-content: space-between;
+
   align-items: center;
-  padding: 12px;
-  margin-bottom: 8px;
-  background: #f8fafc;
-  border-radius: 8px;
+
+  justify-content: space-between;
+
+  gap: 12px;
+
+  min-height: 50px;
+
+  padding: 10px 13px;
+
+  margin-bottom: 9px;
+
+  border-radius: 12px;
+
+  background:
+    rgba(255, 255, 255, 0.045);
+
+  border: 1px solid rgba(255, 255, 255, 0.06);
+
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.2s ease;
 }
+
+.list-item:hover {
+  background:
+    rgba(37, 99, 235, 0.08);
+
+  border-color:
+    rgba(96, 165, 250, 0.2);
+
+  transform: translateX(3px);
+}
+
+.list-item span {
+  font-size: 15px;
+
+  font-weight: 600;
+
+  color:
+    rgba(255, 255, 255, 0.9);
+}
+
+
+/* =========================================================
+   DELETE BUTTON
+========================================================= */
 
 .delete-button {
-  background: #dc2626;
+  border:
+    1px solid rgba(248, 113, 113, 0.3);
+
+  background:
+    linear-gradient(
+      135deg,
+      #dc2626,
+      #b91c1c
+    );
+
+  color: #ffffff;
+
+  border-radius: 9px;
+
+  padding: 7px 12px;
+
+  font-size: 12px;
+
+  font-weight: 700;
+
+  cursor: pointer;
+
+  box-shadow:
+    0 5px 14px rgba(220, 38, 38, 0.15);
 }
+
+.delete-button:hover {
+  background:
+    linear-gradient(
+      135deg,
+      #ef4444,
+      #dc2626
+    );
+
+  box-shadow:
+    0 8px 18px rgba(220, 38, 38, 0.25);
+}
+
+
+/* =========================================================
+   EMPTY
+========================================================= */
 
 .empty {
-  color: #777;
   text-align: center;
+
+  padding: 25px 10px;
+
+  color:
+    rgba(255, 255, 255, 0.42);
+
+  font-size: 14px;
 }
 
-@media (max-width: 700px) {
-  .admin-container {
-    grid-template-columns: 1fr;
-  }
 
-  .add-row {
-    flex-direction: column;
-  }
+/* =========================================================
+   START SELECTION
+========================================================= */
+
+.start-container {
+  width: 100%;
+
+  display: flex;
+
+  justify-content: center;
+
+  margin-top: 30px;
+
+  position: relative;
+
+  z-index: 2;
 }
+
+.start-button {
+  min-width: 280px;
+
+  padding: 15px 30px;
+
+  border: none;
+
+  border-radius: 14px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #2563eb 0%,
+      #1d4ed8 50%,
+      #dc2626 100%
+    );
+
+  color: #ffffff;
+
+  font-size: 16px;
+
+  font-weight: 800;
+
+  cursor: pointer;
+
+  box-shadow:
+    0 12px 30px rgba(37, 99, 235, 0.25);
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    opacity 0.2s ease;
+}
+
+.start-button:hover:not(:disabled) {
+  transform: translateY(-3px);
+
+  box-shadow:
+    0 18px 35px rgba(37, 99, 235, 0.35);
+}
+
+.start-button:disabled {
+  opacity: 0.35;
+
+  cursor: not-allowed;
+
+  box-shadow: none;
+}
+
+
+/* =========================================================
+   DRAFT PAGE
+========================================================= */
+
+.draft-page {
+  width: 100%;
+
+  max-width: 1250px;
+
+  margin: 0 auto;
+
+  display: grid;
+
+  grid-template-columns:
+    minmax(0, 1.1fr)
+    minmax(0, 0.9fr);
+
+  gap: 25px;
+
+  align-items: start;
+
+  position: relative;
+
+  z-index: 1;
+}
+
+
+/* =========================================================
+   AVAILABLE PLAYERS
+========================================================= */
+
+.available {
+  max-height: 70vh;
+
+  overflow-y: auto;
+
+  scrollbar-width: thin;
+
+  scrollbar-color:
+    #2563eb
+    transparent;
+}
+
+.available::-webkit-scrollbar {
+  width: 6px;
+}
+
+.available::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.available::-webkit-scrollbar-thumb {
+  background:
+    linear-gradient(
+      #3b82f6,
+      #dc2626
+    );
+
+  border-radius: 10px;
+}
+
+
+/* =========================================================
+   PLAYER CARD
+========================================================= */
+
+.player-card {
+  padding: 16px;
+
+  margin-bottom: 12px;
+
+  border-radius: 15px;
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.065),
+      rgba(255, 255, 255, 0.025)
+    );
+
+  border: 1px solid rgba(255, 255, 255, 0.08);
+
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease,
+    background 0.2s ease;
+}
+
+.player-card:hover {
+  transform: translateY(-2px);
+
+  border-color:
+    rgba(96, 165, 250, 0.25);
+
+  background:
+    rgba(37, 99, 235, 0.055);
+}
+
+.player-card strong {
+  display: block;
+
+  font-size: 17px;
+
+  margin-bottom: 13px;
+
+  color: #ffffff;
+}
+
+
+/* =========================================================
+   CAPTAIN BUTTONS
+========================================================= */
+
+.captain-buttons {
+  display: flex;
+
+  gap: 10px;
+
+  flex-wrap: wrap;
+}
+
+.captain-buttons button {
+  flex: 1;
+
+  min-width: 120px;
+
+  min-height: 42px;
+
+  border-radius: 11px;
+
+  font-size: 13px;
+
+  font-weight: 750;
+
+  cursor: pointer;
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    opacity 0.2s ease;
+}
+
+
+/* =========================================================
+   ACTIVE CAPTAIN - BLUE
+========================================================= */
 
 .active-captain-button {
-  background-color: green;
-  color: white;
-  border: none;
+  border:
+    1px solid rgba(147, 197, 253, 0.6);
+
+  background:
+    linear-gradient(
+      135deg,
+      #3b82f6,
+      #1d4ed8
+    );
+
+  color: #ffffff;
+
+  box-shadow:
+    0 7px 20px rgba(37, 99, 235, 0.3);
+}
+
+.active-captain-button:hover {
+  transform: translateY(-2px);
+
+  box-shadow:
+    0 10px 25px rgba(37, 99, 235, 0.4);
+}
+
+
+/* =========================================================
+   INACTIVE CAPTAIN - RED
+========================================================= */
+
+.inactive-captain-button {
+  border:
+    1px solid rgba(248, 113, 113, 0.35);
+
+  background:
+    linear-gradient(
+      135deg,
+      #dc2626,
+      #991b1b
+    );
+
+  color: #ffffff;
+
+  cursor: not-allowed;
+
+  opacity: 0.72;
+
+  box-shadow:
+    0 5px 15px rgba(220, 38, 38, 0.12);
+}
+
+
+/* =========================================================
+   TEAMS
+========================================================= */
+
+.teams-container {
+  display: grid;
+
+  grid-template-columns: 1fr 1fr;
+
+  gap: 18px;
+
+  align-items: start;
+}
+
+.team {
+  min-height: 250px;
+
+  position: relative;
+
+  overflow: hidden;
+}
+
+
+/* Team top line */
+
+.team::before {
+  content: "";
+
+  position: absolute;
+
+  width: 100%;
+
+  height: 3px;
+
+  top: 0;
+
+  left: 0;
+
+  background:
+    linear-gradient(
+      90deg,
+      #2563eb,
+      #60a5fa
+    );
+}
+
+
+/* Second team red */
+
+.team:nth-child(2)::before {
+  background:
+    linear-gradient(
+      90deg,
+      #dc2626,
+      #f87171
+    );
+}
+
+
+.team h2 {
+  padding-top: 5px;
+
+  border-bottom:
+    1px solid rgba(255, 255, 255, 0.08);
+
+  padding-bottom: 14px;
+}
+
+.team .headers:not(h2) {
+  display: flex;
+
+  align-items: center;
+
+  min-height: 40px;
+
+  padding: 8px 10px;
+
+  margin-bottom: 7px;
+
+  border-radius: 9px;
+
+  background:
+    rgba(255, 255, 255, 0.045);
+
+  font-size: 14px;
+
+  color:
+    rgba(255, 255, 255, 0.82);
+
+  border-left:
+    3px solid #2563eb;
+}
+
+.team:nth-child(2) .headers:not(h2) {
+  border-left-color:
+    #dc2626;
+}
+
+.team p {
+  color:
+    rgba(255, 255, 255, 0.4);
+
+  text-align: center;
+
+  margin-top: 35px;
+}
+
+
+/* =========================================================
+   UNDO BUTTON
+========================================================= */
+
+.undo-button {
+  display: block;
+
+  margin: -15px auto 25px;
+
+  padding: 10px 20px;
+
+  border-radius: 10px;
+
+  border:
+    1px solid rgba(96, 165, 250, 0.3);
+
+  background:
+    rgba(37, 99, 235, 0.1);
+
+  color: #93c5fd;
+
+  font-size: 13px;
+
+  font-weight: 750;
+
+  cursor: pointer;
+
+  transition:
+    transform 0.2s ease,
+    background 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.undo-button:hover {
+  background:
+    rgba(37, 99, 235, 0.2);
+
+  transform: translateY(-2px);
+
+  box-shadow:
+    0 8px 20px rgba(37, 99, 235, 0.15);
+}
+
+
+/* =========================================================
+   BACK / LOGOUT
+========================================================= */
+
+.back-button {
+  display: block;
+
+  margin: 30px auto 0;
+
+  padding: 11px 25px;
+
+  border-radius: 11px;
+
+  border:
+    1px solid rgba(248, 113, 113, 0.25);
+
+  background:
+    rgba(220, 38, 38, 0.1);
+
+  color: #fca5a5;
+
+  font-size: 14px;
+
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.back-button:hover {
+  background:
+    rgba(220, 38, 38, 0.2);
+
+  border-color:
+    rgba(248, 113, 113, 0.45);
+
+  transform: translateY(-2px);
+}
+
+
+/* =========================================================
+   PLAYER SELECT / BULK ACTIONS
+========================================================= */
+
+.players-header {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap: 12px;
+
+  margin-bottom: 18px;
+}
+
+.player-actions {
+  display: flex;
+
+  gap: 8px;
+
+  flex-wrap: wrap;
+}
+
+.select-all-button,
+.bulk-delete-button {
+  border-radius: 9px;
+
+  padding: 8px 12px;
+
+  font-size: 12px;
+
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition:
+    transform 0.2s ease,
+    background 0.2s ease;
+}
+
+
+/* Select all - blue */
+
+.select-all-button {
+  border:
+    1px solid rgba(96, 165, 250, 0.3);
+
+  background:
+    rgba(37, 99, 235, 0.12);
+
+  color: #93c5fd;
+}
+
+.select-all-button:hover {
+  background:
+    rgba(37, 99, 235, 0.22);
+
+  transform: translateY(-1px);
+}
+
+
+/* Bulk delete - red */
+
+.bulk-delete-button {
+  border:
+    1px solid rgba(248, 113, 113, 0.3);
+
+  background:
+    rgba(220, 38, 38, 0.12);
+
+  color: #fca5a5;
+}
+
+.bulk-delete-button:hover:not(:disabled) {
+  background:
+    rgba(220, 38, 38, 0.22);
+
+  transform: translateY(-1px);
+}
+
+.bulk-delete-button:disabled {
+  opacity: 0.35;
+
+  cursor: not-allowed;
+}
+
+
+/* Checkbox */
+
+.player-select {
+  width: 17px;
+
+  height: 17px;
+
+  accent-color: #2563eb;
+
   cursor: pointer;
 }
 
-.inactive-captain-button {
-  background-color: red;
-  color: white;
-  border: none;
-  cursor: not-allowed;
-}
-/* =========================================
+
+/* =========================================================
    LOGIN PAGE
-========================================= */
+========================================================= */
 
 .login-page {
   min-height: 100vh;
+
   min-height: 100dvh;
 
   display: flex;
+
   align-items: center;
+
   justify-content: center;
 
   padding: 30px 20px;
 
   position: relative;
+
   overflow: hidden;
 
   background:
     radial-gradient(
       circle at top left,
-      rgba(34, 197, 94, 0.18),
+      rgba(37, 99, 235, 0.25),
       transparent 35%
     ),
     radial-gradient(
       circle at bottom right,
-      rgba(16, 185, 129, 0.15),
+      rgba(220, 38, 38, 0.22),
       transparent 35%
     ),
     linear-gradient(
       135deg,
-      #071a12 0%,
-      #0b2a1b 50%,
-      #06140d 100%
+      #050b15 0%,
+      #0b1728 50%,
+      #100a12 100%
     );
 
   box-sizing: border-box;
 }
 
 
-/* =========================================
-   BACKGROUND CIRCLES
-========================================= */
+/* =========================================================
+   LOGIN BACKGROUND CIRCLES
+========================================================= */
 
 .login-bg-circle {
   position: absolute;
@@ -162,46 +1091,56 @@ button:hover {
 }
 
 .circle-one {
-  width: 320px;
-  height: 320px;
+  width: 330px;
+
+  height: 330px;
 
   top: -140px;
-  left: -100px;
 
-  background: rgba(34, 197, 94, 0.12);
+  left: -110px;
+
+  background:
+    rgba(37, 99, 235, 0.16);
 }
 
 .circle-two {
-  width: 400px;
-  height: 400px;
+  width: 420px;
 
-  bottom: -180px;
-  right: -140px;
+  height: 420px;
 
-  background: rgba(16, 185, 129, 0.1);
+  bottom: -190px;
+
+  right: -150px;
+
+  background:
+    rgba(220, 38, 38, 0.13);
 }
 
 
-/* =========================================
-   MAIN CONTAINER
-========================================= */
+/* =========================================================
+   LOGIN CONTAINER
+========================================================= */
 
 .login-container {
   width: 100%;
+
   max-width: 430px;
 
   position: relative;
+
   z-index: 2;
 
   display: flex;
+
   flex-direction: column;
+
   align-items: center;
 }
 
 
-/* =========================================
+/* =========================================================
    LOGIN HEADER
-========================================= */
+========================================================= */
 
 .login-header {
   text-align: center;
@@ -211,24 +1150,33 @@ button:hover {
 
 .cricket-logo {
   width: 72px;
+
   height: 72px;
 
   margin: 0 auto 12px;
 
   display: flex;
+
   align-items: center;
+
   justify-content: center;
 
   border-radius: 22px;
 
   font-size: 38px;
 
-  background: rgba(255, 255, 255, 0.1);
+  background:
+    linear-gradient(
+      135deg,
+      rgba(37, 99, 235, 0.2),
+      rgba(220, 38, 38, 0.16)
+    );
 
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  border:
+    1px solid rgba(255, 255, 255, 0.15);
 
   box-shadow:
-    0 12px 30px rgba(0, 0, 0, 0.25),
+    0 12px 30px rgba(0, 0, 0, 0.3),
     inset 0 1px 0 rgba(255, 255, 255, 0.1);
 
   backdrop-filter: blur(12px);
@@ -249,7 +1197,7 @@ button:hover {
 .login-header p {
   margin: 5px 0 0;
 
-  color: #9fc8b0;
+  color: #a7b7ca;
 
   font-size: 14px;
 
@@ -257,9 +1205,9 @@ button:hover {
 }
 
 
-/* =========================================
+/* =========================================================
    LOGIN CARD
-========================================= */
+========================================================= */
 
 .login-card {
   width: 100%;
@@ -270,21 +1218,23 @@ button:hover {
 
   border-radius: 24px;
 
-  background: rgba(255, 255, 255, 0.96);
+  background:
+    rgba(255, 255, 255, 0.97);
 
-  border: 1px solid rgba(255, 255, 255, 0.4);
+  border:
+    1px solid rgba(255, 255, 255, 0.4);
 
   box-shadow:
-    0 25px 60px rgba(0, 0, 0, 0.35),
+    0 25px 60px rgba(0, 0, 0, 0.4),
     0 8px 20px rgba(0, 0, 0, 0.15);
 
   backdrop-filter: blur(20px);
 }
 
 
-/* =========================================
+/* =========================================================
    LOGIN TITLE
-========================================= */
+========================================================= */
 
 .login-title {
   text-align: center;
@@ -295,7 +1245,7 @@ button:hover {
 .login-title h2 {
   margin: 0 0 8px;
 
-  color: #123b26;
+  color: #172033;
 
   font-size: 24px;
 
@@ -305,7 +1255,7 @@ button:hover {
 .login-title p {
   margin: 0;
 
-  color: #718077;
+  color: #687386;
 
   font-size: 14px;
 
@@ -313,9 +1263,9 @@ button:hover {
 }
 
 
-/* =========================================
-   FORM FIELD
-========================================= */
+/* =========================================================
+   LOGIN FIELD
+========================================================= */
 
 .login-field {
   margin-bottom: 20px;
@@ -326,7 +1276,7 @@ button:hover {
 
   margin-bottom: 8px;
 
-  color: #234232;
+  color: #263247;
 
   font-size: 14px;
 
@@ -334,9 +1284,9 @@ button:hover {
 }
 
 
-/* =========================================
-   INPUT
-========================================= */
+/* =========================================================
+   LOGIN INPUT
+========================================================= */
 
 .input-wrapper {
   position: relative;
@@ -348,6 +1298,7 @@ button:hover {
   position: absolute;
 
   left: 15px;
+
   top: 50%;
 
   transform: translateY(-50%);
@@ -366,17 +1317,20 @@ button:hover {
 
   box-sizing: border-box;
 
-  padding: 0 15px 0 48px;
+  padding:
+    0 15px 0 48px;
 
-  border: 1.5px solid #dce5df;
+  border:
+    1.5px solid #d8dee8;
 
   border-radius: 13px;
 
   outline: none;
 
-  background: #f8faf9;
+  background:
+    #f7f9fc;
 
-  color: #193526;
+  color: #172033;
 
   font-size: 15px;
 
@@ -387,22 +1341,24 @@ button:hover {
 }
 
 .input-wrapper input::placeholder {
-  color: #9aa8a0;
+  color: #9aa4b2;
 }
 
 .input-wrapper input:focus {
-  border-color: #22a35a;
+  border-color:
+    #2563eb;
 
-  background: #ffffff;
+  background:
+    #ffffff;
 
   box-shadow:
-    0 0 0 4px rgba(34, 163, 90, 0.12);
+    0 0 0 4px rgba(37, 99, 235, 0.12);
 }
 
 
-/* =========================================
+/* =========================================================
    LOGIN BUTTON
-========================================= */
+========================================================= */
 
 .login-button {
   width: 100%;
@@ -420,11 +1376,12 @@ button:hover {
   display: flex;
 
   align-items: center;
+
   justify-content: center;
 
   gap: 9px;
 
-  color: white;
+  color: #ffffff;
 
   font-size: 16px;
 
@@ -433,12 +1390,13 @@ button:hover {
   background:
     linear-gradient(
       135deg,
-      #16a34a,
-      #15803d
+      #2563eb 0%,
+      #1d4ed8 50%,
+      #dc2626 100%
     );
 
   box-shadow:
-    0 8px 20px rgba(22, 163, 74, 0.25);
+    0 8px 22px rgba(37, 99, 235, 0.28);
 
   transition:
     transform 0.2s ease,
@@ -450,7 +1408,7 @@ button:hover {
   transform: translateY(-2px);
 
   box-shadow:
-    0 12px 26px rgba(22, 163, 74, 0.32);
+    0 12px 28px rgba(37, 99, 235, 0.35);
 
   filter: brightness(1.05);
 }
@@ -459,18 +1417,19 @@ button:hover {
   transform: translateY(0);
 
   box-shadow:
-    0 5px 12px rgba(22, 163, 74, 0.2);
+    0 5px 12px rgba(37, 99, 235, 0.2);
 }
 
 
-/* =========================================
-   FOOTER INSIDE CARD
-========================================= */
+/* =========================================================
+   LOGIN FOOTER
+========================================================= */
 
 .login-footer {
   display: flex;
 
   align-items: center;
+
   justify-content: center;
 
   gap: 10px;
@@ -481,7 +1440,7 @@ button:hover {
 .login-footer p {
   margin: 0;
 
-  color: #8a978f;
+  color: #8a94a3;
 
   font-size: 12px;
 
@@ -491,14 +1450,15 @@ button:hover {
 }
 
 
-/* =========================================
+/* =========================================================
    COPYRIGHT
-========================================= */
+========================================================= */
 
 .copyright {
   margin: 20px 0 0;
 
-  color: rgba(255, 255, 255, 0.55);
+  color:
+    rgba(255, 255, 255, 0.55);
 
   font-size: 11px;
 
@@ -506,13 +1466,127 @@ button:hover {
 }
 
 
-/* =========================================
-   MOBILE RESPONSIVE
-========================================= */
+/* =========================================================
+   TABLET
+========================================================= */
 
-@media (max-width: 600px) {
+@media (max-width: 950px) {
+  .app {
+    padding:
+      28px 20px 45px;
+  }
+
+  .admin-container {
+    grid-template-columns: 1fr;
+  }
+
+  .draft-page {
+    grid-template-columns: 1fr;
+  }
+
+  .available {
+    max-height: none;
+  }
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 650px) {
+  .app {
+    padding:
+      22px 14px 35px;
+  }
+
+  h1.headers {
+    font-size: 26px;
+
+    margin-bottom: 25px;
+  }
+
+  h2.headers {
+    font-size: 18px;
+  }
+
+  .card {
+    padding: 17px;
+
+    border-radius: 16px;
+  }
+
+  .add-row {
+    flex-direction: column;
+  }
+
+  .add-row input {
+    height: 45px;
+  }
+
+  .add-row button {
+    min-height: 44px;
+
+    width: 100%;
+  }
+
+  .list-item {
+    padding: 9px 10px;
+  }
+
+  .list-item span {
+    font-size: 13px;
+  }
+
+  .delete-button {
+    padding: 7px 9px;
+
+    font-size: 11px;
+  }
+
+  .start-button {
+    width: 100%;
+
+    min-width: 0;
+  }
+
+  .teams-container {
+    grid-template-columns: 1fr;
+  }
+
+  .player-card {
+    padding: 13px;
+  }
+
+  .captain-buttons {
+    flex-direction: column;
+  }
+
+  .captain-buttons button {
+    width: 100%;
+  }
+
+  .players-header {
+    align-items: flex-start;
+
+    flex-direction: column;
+  }
+
+  .player-actions {
+    width: 100%;
+  }
+
+  .select-all-button,
+  .bulk-delete-button {
+    flex: 1;
+  }
+
+
+  /* LOGIN */
+
   .login-page {
-    padding: 20px 16px;
+    padding:
+      20px 16px;
   }
 
   .login-container {
@@ -525,6 +1599,7 @@ button:hover {
 
   .cricket-logo {
     width: 62px;
+
     height: 62px;
 
     border-radius: 18px;
@@ -541,7 +1616,8 @@ button:hover {
   }
 
   .login-card {
-    padding: 25px 20px;
+    padding:
+      25px 20px;
 
     border-radius: 20px;
   }
@@ -576,23 +1652,61 @@ button:hover {
 }
 
 
-/* =========================================
+/* =========================================================
    SMALL MOBILE
-========================================= */
+========================================================= */
 
-@media (max-width: 380px) {
+@media (max-width: 400px) {
+  .app {
+    padding-left: 10px;
+
+    padding-right: 10px;
+  }
+
+  h1.headers {
+    font-size: 23px;
+  }
+
+  .card {
+    padding: 14px;
+  }
+
+  .player-card strong {
+    font-size: 15px;
+  }
+
+  .team {
+    min-height: 200px;
+  }
+
+  .back-button {
+    width: 100%;
+  }
+
+  .undo-button {
+    width: 100%;
+
+    margin-top: -8px;
+  }
+
+
+  /* LOGIN */
+
   .login-page {
-    padding: 16px 12px;
+    padding:
+      16px 12px;
   }
 
   .login-card {
-    padding: 22px 16px;
+    padding:
+      22px 16px;
 
     border-radius: 18px;
   }
 
   .cricket-logo {
     width: 56px;
+
     height: 56px;
 
     font-size: 28px;
@@ -608,19 +1722,18 @@ button:hover {
 }
 
 
-/* =========================================
+/* =========================================================
    LANDSCAPE MOBILE
-========================================= */
+========================================================= */
 
-@media (
-  max-height: 650px
-) and (orientation: landscape) {
+@media (max-height: 650px) and (orientation: landscape) {
   .login-page {
     align-items: flex-start;
 
     overflow-y: auto;
 
     padding-top: 20px;
+
     padding-bottom: 20px;
   }
 
@@ -630,6 +1743,7 @@ button:hover {
 
   .cricket-logo {
     width: 50px;
+
     height: 50px;
 
     font-size: 25px;

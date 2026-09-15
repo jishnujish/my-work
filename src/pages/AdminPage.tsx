@@ -41,6 +41,10 @@ function AdminPage({
   const [captainName, setCaptainName] =
     useState("");
 
+  // Selected players for bulk delete
+  const [selectedPlayers, setSelectedPlayers] =
+    useState<string[]>([]);
+
   // ==========================================
   // ADD SINGLE PLAYER
   // ==========================================
@@ -152,12 +156,19 @@ function AdminPage({
   };
 
   // ==========================================
-  // DELETE PLAYER
+  // DELETE SINGLE PLAYER
   // ==========================================
 
   const removePlayer = async (
     id: string
   ) => {
+    const confirmDelete =
+      window.confirm(
+        "Are you sure you want to delete this player?"
+      );
+
+    if (!confirmDelete) return;
+
     const { error } =
       await supabase
         .from("players")
@@ -183,7 +194,118 @@ function AdminPage({
           player.id !== id
       )
     );
+
+    // Remove from selected list also
+    setSelectedPlayers((current) =>
+      current.filter(
+        (playerId) =>
+          playerId !== id
+      )
+    );
   };
+
+  // ==========================================
+  // SELECT / UNSELECT PLAYER
+  // ==========================================
+
+  const togglePlayerSelection = (
+    id: string
+  ) => {
+    setSelectedPlayers((current) =>
+      current.includes(id)
+        ? current.filter(
+            (playerId) =>
+              playerId !== id
+          )
+        : [
+            ...current,
+            id,
+          ]
+    );
+  };
+
+  // ==========================================
+  // SELECT ALL PLAYERS
+  // ==========================================
+
+  const selectAllPlayers = () => {
+    if (
+      selectedPlayers.length ===
+      players.length
+    ) {
+      // Unselect all
+      setSelectedPlayers([]);
+    } else {
+      // Select all
+      setSelectedPlayers(
+        players.map(
+          (player) => player.id
+        )
+      );
+    }
+  };
+
+  // ==========================================
+  // DELETE SELECTED PLAYERS
+  // ==========================================
+
+  const deleteSelectedPlayers =
+    async () => {
+      if (
+        selectedPlayers.length === 0
+      ) {
+        alert(
+          "Please select players to delete"
+        );
+
+        return;
+      }
+
+      const confirmDelete =
+        window.confirm(
+          `Are you sure you want to delete ${selectedPlayers.length} selected player(s)?`
+        );
+
+      if (!confirmDelete) return;
+
+      const {
+        error,
+      } = await supabase
+        .from("players")
+        .delete()
+        .in(
+          "id",
+          selectedPlayers
+        );
+
+      if (error) {
+        console.error(
+          "Bulk delete players error:",
+          error
+        );
+
+        alert(
+          "Failed to delete selected players"
+        );
+
+        return;
+      }
+
+      setPlayers((current) =>
+        current.filter(
+          (player) =>
+            !selectedPlayers.includes(
+              player.id
+            )
+        )
+      );
+
+      setSelectedPlayers([]);
+
+      alert(
+        "Selected players deleted successfully"
+      );
+    };
 
   // ==========================================
   // ADD CAPTAIN
@@ -236,6 +358,13 @@ function AdminPage({
   const removeCaptain = async (
     id: string
   ) => {
+    const confirmDelete =
+      window.confirm(
+        "Are you sure you want to delete this captain?"
+      );
+
+    if (!confirmDelete) return;
+
     const { error } =
       await supabase
         .from("captains")
@@ -263,6 +392,15 @@ function AdminPage({
     );
   };
 
+  // ==========================================
+  // CHECK SELECT ALL STATUS
+  // ==========================================
+
+  const allPlayersSelected =
+    players.length > 0 &&
+    selectedPlayers.length ===
+      players.length;
+
   return (
     <div className="app">
 
@@ -286,9 +424,52 @@ function AdminPage({
 
         <section className="card">
 
-          <h2 className="headers">
-            👤 Players
-          </h2>
+          {/* PLAYERS HEADER */}
+
+          <div className="players-header">
+
+            <h2 className="headers">
+              👤 Players
+            </h2>
+
+            {players.length > 0 && (
+              <div className="player-actions">
+
+                {/* SELECT ALL */}
+
+                <button
+                  className="select-all-button"
+                  onClick={
+                    selectAllPlayers
+                  }
+                >
+                  {allPlayersSelected
+                    ? "☐ Unselect All"
+                    : "☑ Select All"}
+                </button>
+
+                {/* DELETE SELECTED */}
+
+                <button
+                  className="bulk-delete-button"
+                  onClick={
+                    deleteSelectedPlayers
+                  }
+                  disabled={
+                    selectedPlayers.length ===
+                    0
+                  }
+                >
+                  🗑️ Delete Selected
+                  {selectedPlayers.length >
+                    0 &&
+                    ` (${selectedPlayers.length})`}
+                </button>
+
+              </div>
+            )}
+
+          </div>
 
           {/* SINGLE PLAYER */}
 
@@ -351,21 +532,45 @@ function AdminPage({
           {/* PLAYERS LIST */}
 
           {players.length === 0 ? (
+
             <p className="empty">
               No players added
             </p>
+
           ) : (
+
             players.map(
               (player, index) => (
+
                 <div
                   className="list-item"
                   key={player.id}
                 >
 
-                  <span>
-                    {index + 1}.{" "}
-                    {player.name}
-                  </span>
+                  {/* CHECKBOX + NAME */}
+
+                  <div className="player-select">
+
+                    <input
+                      type="checkbox"
+                      checked={selectedPlayers.includes(
+                        player.id
+                      )}
+                      onChange={() =>
+                        togglePlayerSelection(
+                          player.id
+                        )
+                      }
+                    />
+
+                    <span>
+                      {index + 1}.{" "}
+                      {player.name}
+                    </span>
+
+                  </div>
+
+                  {/* SINGLE DELETE */}
 
                   <button
                     className="delete-button"
@@ -379,8 +584,10 @@ function AdminPage({
                   </button>
 
                 </div>
+
               )
             )
+
           )}
 
         </section>
@@ -416,7 +623,9 @@ function AdminPage({
             />
 
             <button
-              onClick={addCaptain}
+              onClick={
+                addCaptain
+              }
             >
               + Add Captain
             </button>
@@ -424,12 +633,16 @@ function AdminPage({
           </div>
 
           {captains.length === 0 ? (
+
             <p className="empty">
               No captains added
             </p>
+
           ) : (
+
             captains.map(
               (captain, index) => (
+
                 <div
                   className="list-item"
                   key={captain.id}
@@ -452,8 +665,10 @@ function AdminPage({
                   </button>
 
                 </div>
+
               )
             )
+
           )}
 
         </section>
@@ -472,7 +687,9 @@ function AdminPage({
             players.length === 0 ||
             captains.length !== 2
           }
-          onClick={onStartDraft}
+          onClick={
+            onStartDraft
+          }
         >
           🚀 START Selection
         </button>

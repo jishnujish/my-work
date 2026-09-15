@@ -14,13 +14,7 @@ type DraftPageProps = {
     captainId: string
   ) => void;
 
-  // ==========================================
-  // UNDO
-  // ==========================================
-
   undoLastSelection: () => void;
-
-  activeCaptainId: string;
 
   onBack: () => void;
 };
@@ -31,7 +25,6 @@ function DraftPage({
   teams,
   selectPlayer,
   undoLastSelection,
-  activeCaptainId,
   onBack,
 }: DraftPageProps) {
 
@@ -39,19 +32,36 @@ function DraftPage({
   // AVAILABLE PLAYERS
   // ==========================================
 
-  const availablePlayers = players.filter(
-    (player) =>
-      player.status === "available"
-  );
+  const availablePlayers =
+    players.filter(
+      (player) =>
+        player.status === "available"
+    );
+
+  // ==========================================
+  // SELECTED PLAYER COUNT
+  // ==========================================
+
+  const selectedPlayerCount =
+    players.filter(
+      (player) =>
+        player.status === "selected"
+    ).length;
 
   // ==========================================
   // ACTIVE CAPTAIN
   // ==========================================
 
-  const activeCaptain = captains.find(
-    (captain) =>
-      captain.id === activeCaptainId
-  );
+  const activeCaptain =
+    captains.length > 0
+      ? captains[
+          selectedPlayerCount %
+            captains.length
+        ]
+      : undefined;
+
+  const activeCaptainId =
+    activeCaptain?.id || "";
 
   return (
     <div className="app">
@@ -84,6 +94,10 @@ function DraftPage({
       >
         ↩️ Undo Last Selection
       </button>
+
+      {/* ================================= */}
+      {/* DRAFT PAGE */}
+      {/* ================================= */}
 
       <div className="draft-page">
 
@@ -135,15 +149,12 @@ function DraftPage({
                         return (
                           <button
                             key={captain.id}
-
                             disabled={!isActive}
-
                             className={
                               isActive
                                 ? "active-captain-button"
                                 : "inactive-captain-button"
                             }
-
                             onClick={() =>
                               selectPlayer(
                                 player,
@@ -154,17 +165,14 @@ function DraftPage({
                             {captain.name}
                           </button>
                         );
-
                       }
                     )}
 
                   </div>
 
                 </div>
-
               )
             )
-
           )}
 
         </section>
@@ -189,9 +197,7 @@ function DraftPage({
                   👑 {captain.name}
                 </h2>
 
-                {/* ================================= */}
                 {/* SELECTED PLAYERS */}
-                {/* ================================= */}
 
                 {teams[captain.id]?.length ? (
 
@@ -202,7 +208,8 @@ function DraftPage({
                         className="headers"
                         key={player.id}
                       >
-                        {index + 1}. {player.name}
+                        {index + 1}.{" "}
+                        {player.name}
                       </div>
 
                     )
@@ -217,7 +224,6 @@ function DraftPage({
                 )}
 
               </div>
-
             )
           )}
 
