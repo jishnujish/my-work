@@ -548,27 +548,18 @@ function AdminPage({
                 >
 
                   {/* CHECKBOX + NAME */}
+<div className="player-select-wrapper">
+  <input
+    type="checkbox"
+    className="player-checkbox"
+    checked={selectedPlayers.includes(player.id)}
+    onChange={() => togglePlayerSelection(player.id)}
+  />
 
-                  <div className="player-select">
-
-                    <input
-                      type="checkbox"
-                      checked={selectedPlayers.includes(
-                        player.id
-                      )}
-                      onChange={() =>
-                        togglePlayerSelection(
-                          player.id
-                        )
-                      }
-                    />
-
-                    <span>
-                      {index + 1}.{" "}
-                      {player.name}
-                    </span>
-
-                  </div>
+  <span className="player-name">
+    {index + 1}. {player.name}
+  </span>
+</div>
 
                   {/* SINGLE DELETE */}
 
